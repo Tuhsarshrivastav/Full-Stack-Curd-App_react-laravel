@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-export class AddContact extends Component {
+export class EditContact extends Component {
     state = {
         fullName: "",
         email: "",
@@ -9,20 +9,26 @@ export class AddContact extends Component {
     handleInput = e => {
         this.setState({ [e.target.name]: e.target.value });
     };
-
-    saveContact = async e => {
+    updateContact = async e => {
         e.preventDefault();
-        const res = await axios.post("/contact", this.state);
-        this.setState({ fullName: "", email: "", phone: "" });
+        const id = this.props.match.params.id;
+        const res = await axios.patch(`/contact/${id}`, this.state);
         if (res.data.status === 200) {
             this.props.history.push("/");
         }
-        console.log(res);
     };
+
+    async componentDidMount() {
+        const id = this.props.match.params.id;
+        const res = await axios.get(`/contact/${id}/edit`);
+        this.setState({ fullName: res.data.contact.fullName });
+        this.setState({ email: res.data.contact.email });
+        this.setState({ phone: res.data.contact.phone });
+    }
     render() {
         return (
             <div>
-                <form onSubmit={this.saveContact}>
+                <form onSubmit={this.updateContact}>
                     <div className="form-group">
                         <input
                             type="text"
@@ -60,7 +66,7 @@ export class AddContact extends Component {
                         <input
                             type="submit"
                             className="btn btn-primary"
-                            value="Add Contact"
+                            value="UpdateContact"
                         />
                     </div>
                 </form>
@@ -69,4 +75,4 @@ export class AddContact extends Component {
     }
 }
 
-export default AddContact;
+export default EditContact;

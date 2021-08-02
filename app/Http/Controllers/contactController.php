@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Contact;
 
 class contactController extends Controller
 {
@@ -13,7 +14,9 @@ class contactController extends Controller
      */
     public function index()
     {
-        //
+        $contacts =  Contact::all();
+
+        return response()->json(['status' => 200, 'contacts' => $contacts]);
     }
 
     /**
@@ -34,7 +37,14 @@ class contactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $newContact = Contact::create([
+            'fullName' => $request->fullName,
+            'email' => $request->email,
+            'phone' => $request->phone
+        ]);
+        if ($newContact) {
+            return response()->json(['status' => 200]);
+        }
     }
 
     /**
@@ -56,7 +66,8 @@ class contactController extends Controller
      */
     public function edit($id)
     {
-        //
+        $contact = Contact::find($id);
+        return response()->json(['status' => 200, 'contact' => $contact]);
     }
 
     /**
@@ -68,7 +79,13 @@ class contactController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $contact = Contact::find($id);
+        $contact->fulName = $request->fullName;
+        $contact->email = $request->email;
+        $contact->phone = $request->phone;
+        if ($contact->save()) {
+            return response()->json(['status' => 200]);
+        }
     }
 
     /**
@@ -79,6 +96,9 @@ class contactController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $contact = Contact::find($id);
+        if ($contact->delete()) {
+            return response()->json(['status' => 200]);
+        }
     }
 }

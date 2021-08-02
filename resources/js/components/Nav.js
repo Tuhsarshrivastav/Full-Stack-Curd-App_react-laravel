@@ -2,11 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 const Nav = () => {
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container">
                 <div className="container-fluid">
                     <Link className="navbar-brand" to="/">
-                        Navbar
+                        Fullstack-Curd-App
                     </Link>
                     <button
                         className="navbar-toggler"
